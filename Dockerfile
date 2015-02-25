@@ -9,16 +9,16 @@ RUN apt-get -y -qq update \
     && apt-get -y -qq install curl
 
 # install orientdb
-ENV ROOT /opt/downloads
-ENV ORIENT_VERSION orientdb-community-2.0.2
+ENV ROOT /opt/orientdb
+ENV ORIENT_VERSION orientdb-community-2.0.3
 ENV ORIENT_URL http://www.orientechnologies.com/download.php?email=unknown@unknown.com&file=${ORIENT_VERSION}.tar.gz&os=linux
-RUN mkdir ${ROOT} \
-    && cd ${ROOT} \
-    && curl ${ORIENT_URL} > ${ORIENT_VERSION}.tar.gz \
-    && tar -xzf ${ORIENT_VERSION}.tar.gz \
-    && ln -s ${ROOT}/${ORIENT_VERSION} ${ROOT}/orientdb \
-    && ln -s ${ROOT}/orientdb/bin/* /usr/local/bin/ \
-    && mkdir /usr/local/log
+RUN mkdir ${ROOT}
+RUN cd ${ROOT}
+RUN curl ${ORIENT_URL} > ${ORIENT_VERSION}.tar.gz
+RUN tar -xzf ${ORIENT_VERSION}.tar.gz -C /opt/orientdb --strip-components=1
+RUN rm ${ORIENT_VERSION}.tar.gz
+RUN ln -s ${ROOT}/bin/* /usr/local/bin/
+RUN mkdir /usr/local/log
 
 # cleanup
 RUN apt-get -y -qq --force-yes clean \
